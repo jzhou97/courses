@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>success page</title>
+  </head>
+  <body>
+    <h1>Welcome, {{current_user.name}}!</h1>
+    <a href="/logout">Logout</a>
+    <h2>{{ user.poked_by.all|length }} people poked you!</h2>
+
+    {% for user in users %}
+      <p>{{user.name}} poked you {{ user.poked_by.all|length }} times.</p>
+    {% endfor %}
+
+    <h3>Poked:</h3>
+    {% for friend in friends %}
+      <p>{{friend.name}}</p>
+      <form action="/remove-friend/{{ friend.id }}" method="post">
+          {% csrf_token %}
+          <input type="submit" value="Poke back" />
+    {% endfor %}
+
+   <h3>People you may want to poke:</h3>
+    {% for user in users %}
+      <p>{{user.name}}</p> <p>{{user.alias}}</p> <p>{{user.email}}</p> <p>Poke History: {{ user.poked_by.all|length }}</p>
+        <form action="/add-friend/{{ user.id }}" method="post">
+          {% csrf_token %}
+          <input type="submit" value="Poke" />
+      </form>
+    {% endfor %}
+
+    <!--<h3>People you may want to poke:</h3>
+    {% for user in users %}
+      <p>{{user.name}}</p> <p>{{user.alias}}</p> <p>{{user.email}}</p> <p>Poke History: {{ user.poked_by.all|length }}</p>
+      <form action="/create/{{ pokee.id }}" method="post">
+          {% csrf_token %}
+          <input type="submit" value="Poke" />
+      </form>
+    {% endfor %}-->
+
+  </body>
+</html>
